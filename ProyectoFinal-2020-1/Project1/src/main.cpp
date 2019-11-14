@@ -2151,7 +2151,7 @@ void applicationLoop() {
 		//NACIMIENTOOO
 
 		glm::mat4 modelNacimiento = glm::mat4(1.0);
-		modelNacimiento = glm::translate(modelNacimiento, glm::vec3(20.0, 0.0, 0.0));
+		modelNacimiento = glm::translate(modelNacimiento, glm::vec3(20.0, -1.0, 0.0));
 		modelNacimiento = glm::scale(modelNacimiento, glm::vec3(0.5, 2.0, 5.0));
 		// Se activa la textura del agua
 		glBindTexture(GL_TEXTURE_2D, textureID21A);
