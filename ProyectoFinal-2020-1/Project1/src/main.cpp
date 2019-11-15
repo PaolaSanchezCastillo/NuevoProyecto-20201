@@ -75,13 +75,13 @@ Box boxMaterials;
 Box box1;
 Box box2;
 
-Box cuadro; 
-Box regalo; 
-Box regalo2; 
+Box cuadro;
+Box regalo;
+Box regalo2;
 
-Box rosca; 
+Box rosca;
 Box guirnalda;
-Box nacimiento; 
+Box nacimiento;
 
 //SOFA
 
@@ -167,9 +167,9 @@ Model modelHelicoptero;
 
 //JUGUETE CARRO 
 
-Model modelEclipseChasis; 
-Model modelEclipseFrontalWheel; 
-Model modelEclipseRearWheels; 
+Model modelEclipseChasis;
+Model modelEclipseFrontalWheel;
+Model modelEclipseRearWheels;
 Model modelEclipseFrontalWheels;
 
 // juguete dart
@@ -188,11 +188,11 @@ Model modelDartLegoRightLeg;
 
 Model modelTV;
 Model modelBuroSala;
-Model planta; 
-Model planta2; 
-Model planta3; 
+Model planta;
+Model planta2;
+Model planta3;
 Model modelTree;
-Model horno; 
+Model horno;
 
 // habitacion
 
@@ -201,8 +201,8 @@ Model horno;
 
 GLuint textureID0, textureID1A, textureID2A, textureID3A, textureID4A, textureID5A, textureID6A;
 GLuint textureID7A, textureID8A, textureID9A, textureID10A, textureID11A, textureID12A, textureID13A;
-GLuint textureID14A; 
-GLuint textureID15A, textureID16A, textureID17A, textureID18A, textureID19A, textureID20A, textureID21A; 
+GLuint textureID14A;
+GLuint textureID15A, textureID16A, textureID17A, textureID18A, textureID19A, textureID20A, textureID21A;
 GLuint skyboxTextureID;
 GLuint textureID1, textureID2, textureID3, textureID4, textureID5, textureIDCocina, textureIDPared, textureIDParedInter,
 textureIDEstufa, textureIDEstufaSup, textureIDRefri, textureIDRefriSup, textureIDAzulejos, textureIDPasto, textureIDSofa,
@@ -417,6 +417,17 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	pared1.init();
 	pared1.setShader(&shaderMulLighting);
 
+	techo1.init();
+	techo1.setShader(&shaderMulLighting);
+
+
+	escritorio.init();
+	escritorio.setShader(&shaderMulLighting);
+
+
+	papelPicado.init();
+	papelPicado.setShader(&shaderMulLighting);
+
 
 	pared2.init();
 	pared2.setShader(&shaderMulLighting);
@@ -525,6 +536,18 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	mueble.init();
 	// Settea el shader a utilizar
 	mueble.setShader(&shaderMulLighting);
+
+
+	//Mueble
+	mueble1Sup.init();
+	// Settea el shader a utilizar
+	mueble1Sup.setShader(&shaderMulLighting);
+
+
+	//Mueble
+	mueble1Inf.init();
+	// Settea el shader a utilizar
+	mueble1Inf.setShader(&shaderMulLighting);
 
 	//sofa1
 	sofabk.init();
@@ -658,9 +681,9 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 
 	//SALA
 
-	modelTV.loadModel("../models/tv/OBJ/Samsung LED TV.obj");//9
+	//modelTV.loadModel("../models/tv/OBJ/Samsung LED TV.obj");//9
 	//modelHelicopter.loadModel("../models/tv/cocacola/mpm_vol.09_p35.obj");//9
-	modelTV.setShader(&shaderMulLighting);//9
+	//modelTV.setShader(&shaderMulLighting);//9
 
 	modelBuroSala.loadModel("../models/buro/Nightstand.obj");
 	modelBuroSala.setShader(&shaderMulLighting);
@@ -2627,7 +2650,7 @@ bool processInput(bool continueApplication) {
 	glfwPollEvents();
 	return continueApplication;
 
-	
+
 }
 
 void applicationLoop() {
@@ -2637,8 +2660,8 @@ void applicationLoop() {
 	float offX = 0.0;
 	float angle = 0.0;
 	float ratio = 5.0;
-	int state = 0, state2=0; //se agregan variables para el movimiento 
-	int estadoHelicoptero = 0; 
+	int state = 0, state2 = 0; //se agregan variables para el movimiento 
+	int estadoHelicoptero = 0;
 
 	float angle2 = 0.0;
 	float ratio2 = 30.0;
@@ -2670,23 +2693,23 @@ void applicationLoop() {
 
 	glm::mat4 modelMatrixEclipse2 = glm::mat4(1.0f);
 	modelMatrixEclipse2 = glm::scale(modelMatrixEclipse2, glm::vec3(0.08, 0.08, 0.08));
-	modelMatrixEclipse2 = glm::translate(modelMatrixEclipse2, glm::vec3(-25,-15.0, 0.0));
+	modelMatrixEclipse2 = glm::translate(modelMatrixEclipse2, glm::vec3(-25, -15.0, 0.0));
 	int stateAuto = 0;
 	float advanceCount = 0.0;
 	float rotCount = 0.0;
 	float rotWheelsX = 0.0;
 	float rotWheelsY = 0.0;
 
-	
+
 
 
 	//ESPECIFICACIONES DEL HELICOPTERO
-	
+
 	float offsetHelicoptero2AdvanceY = 0.0;
 	glm::mat4 matrixModelHelicoptero = glm::mat4(1.0);
 	matrixModelHelicoptero = glm::scale(matrixModelHelicoptero, glm::vec3(0.1, 0.1, 0.1));
 	matrixModelHelicoptero = glm::translate(matrixModelHelicoptero, glm::vec3(-20.0, 5.0, 0.0));
-	
+
 
 	while (psi) {
 
@@ -2897,8 +2920,8 @@ void applicationLoop() {
 		shaderMulLighting.setFloat("pointLights[11].linear", 0.04);
 		shaderMulLighting.setFloat("pointLights[11].quadratic", 0.004);
 
-	// navideñas 2
-		//Esto es para colocar las esferas de las luces (modelo, no las propiedades) 
+		// navideñas 2
+			//Esto es para colocar las esferas de las luces (modelo, no las propiedades) 
 		sphereLamp.setScale(glm::vec3(0.3, 0.3, 0.2));
 		sphereLamp.setPosition(glm::vec3(-11.0, 1.5, -3.5));
 		sphereLamp.setColor(glm::vec4(0.0, 1.0, 0.0, 1.0));
@@ -2924,7 +2947,7 @@ void applicationLoop() {
 		sphereLamp.setColor(glm::vec4(3.2, 0.0, 0.8, 1.0));
 		sphereLamp.render();
 
-		
+
 
 		//azul 
 
@@ -2945,12 +2968,12 @@ void applicationLoop() {
 		sphereLamp.render();
 		//AZul
 		sphereLamp.setScale(glm::vec3(0.1, 0.1, 0.1));
-	     sphereLamp.setPosition(glm::vec3(-9.8, 1.0, -3.5));
+		sphereLamp.setPosition(glm::vec3(-9.8, 1.0, -3.5));
 		sphereLamp.setColor(glm::vec4(0.0, 0.0, 1.0, 1.0));
 		sphereLamp.render();
 
 
-//		Techo de la sala
+		//		Techo de la sala
 
 		sphereLamp.setScale(glm::vec3(1.0, 0.3, 1.0));
 		sphereLamp.setPosition(glm::vec3(5.0, 1.7, -0.8));
@@ -3000,7 +3023,7 @@ void applicationLoop() {
 		glActiveTexture(GL_TEXTURE0);
 
 		//helicoptero
-		modelHelicoptero.render(matrixModelHelicoptero); 
+		modelHelicoptero.render(matrixModelHelicoptero);
 		glActiveTexture(GL_TEXTURE0);
 
 
@@ -3055,7 +3078,7 @@ void applicationLoop() {
 
 
 
-	
+
 
 
 
@@ -3125,7 +3148,7 @@ void applicationLoop() {
 		//shaderMulLighting.setFloat("offsetX", 0);
 
 
-	
+
 
 		//PARED EXTERNA izquierda COMEDOR DE DONDE IRA EL CUADRO
 		glm::mat4 modelPared6 = glm::mat4(1.0);
@@ -3205,7 +3228,7 @@ void applicationLoop() {
 		//shaderMulLighting.setFloat("offsetX", 0);
 
 		// este es el closet
- 
+
 		glm::mat4 modelPared7 = glm::mat4(1.0);
 		modelPared7 = glm::translate(modelPared7, glm::vec3(8.0, 0.0, 0.0));
 		modelPared7 = glm::scale(modelPared7, glm::vec3(0.7, 4.0, 3.0));
@@ -3244,7 +3267,7 @@ void applicationLoop() {
 		//shaderMulLighting.setFloat("offsetX", offX);
 		guirnalda.render(modelGuirnalda);
 		glBindTexture(GL_TEXTURE_2D, 0);		//shaderMulLighting.setFloat("offsetX", 0);
-		 
+
 
 		//NACIMIENTOOO
 
@@ -3438,8 +3461,8 @@ void applicationLoop() {
 		planta2.render(matrixModelPlanta2);
 
 
-	
-	
+
+
 
 		//TERCERA PLANTA
 
@@ -3458,7 +3481,7 @@ void applicationLoop() {
 		//Forze to enable the unit texture to 0 always-------------------------modelCAMA
 		glActiveTexture(GL_TEXTURE0);
 
-	
+
 
 		//MODEL BURO
 
@@ -4697,7 +4720,7 @@ void applicationLoop() {
 
 
 
-			
+
 			break;
 		}
 
@@ -4762,7 +4785,7 @@ void applicationLoop() {
 
 
 
-		 //MAQUINA DE ESTADOS HELICOPTERO
+		//MAQUINA DE ESTADOS HELICOPTERO
 
 		switch (estadoHelicoptero) {
 		case 0:
