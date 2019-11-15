@@ -1,0 +1,25 @@
+﻿D:\Recursos3d\EscenasParaCGtrader\t$m$p$$$\PoliformBed.max
+D:\Recursos3d\EscenasParaCGtrader\t$m$p$$$\MAXFILES.TXT
+D:\Users\mfs15\Downloads\cgmood-studio-sets-beta-3dsmax2015\tex\cgmood-high-contrast-lut.CUBE
+D:\Users\mfs15\Downloads\1622695.5a5b11306aa7c\Poliform_Park_Bed\maps\Poliform_Park_Bed_fabric_05.jpg
+D:\Users\mfs15\Downloads\1622695.5a5b11306aa7c\Poliform_Park_Bed\maps\Poliform_Park_Bed_fabric_05_b.jpg
+D:\Users\mfs15\Downloads\1622695.5a5b11306aa7c\Poliform_Park_Bed\maps\Poliform_Park_Bed_fabric_02n.jpg
+D:\Users\mfs15\Downloads\1622695.5a5b11306aa7c\Poliform_Park_Bed\maps\Poliform_Park_Bed_book_sheets01.jpg
+D:\Users\mfs15\Downloads\1622695.5a5b11306aa7c\Poliform_Park_Bed\maps\Poliform_Park_Bed_book_cover05.png
+D:\Users\mfs15\Downloads\1622695.5a5b11306aa7c\Poliform_Park_Bed\maps\Poliform_Park_Bed_book_sheets03.jpg
+D:\Users\mfs15\Downloads\1622695.5a5b11306aa7c\Poliform_Park_Bed\maps\Poliform_Park_Bed_book_cover02.jpg
+D:\Users\mfs15\Downloads\1622695.5a5b11306aa7c\Poliform_Park_Bed\maps\Poliform_Park_Bed_book_cover06.jpg
+D:\Users\mfs15\Downloads\1622695.5a5b11306aa7c\Poliform_Park_Bed\maps\Poliform_Park_Bed_fabric12.jpg
+D:\Users\mfs15\Downloads\1622695.5a5b11306aa7c\Poliform_Park_Bed\maps\Poliform_Park_Bed_fabric_01.jpg
+D:\Users\mfs15\Downloads\1622695.5a5b11306aa7c\Poliform_Park_Bed\maps\Poliform_Park_Bed_61.jpg
+D:\Users\mfs15\Downloads\1622695.5a5b11306aa7c\Poliform_Park_Bed\maps\Poliform_Park_Bed_velur_dark.jpg
+D:\Users\mfs15\Downloads\1622695.5a5b11306aa7c\Poliform_Park_Bed\maps\Poliform_Park_Bed_xadrez_03.jpg
+D:\Users\mfs15\Downloads\1622695.5a5b11306aa7c\Poliform_Park_Bed\maps\Poliform_Park_Bed_reflect1.png
+D:\Users\mfs15\Downloads\1622695.5a5b11306aa7c\Poliform_Park_Bed\maps\Poliform_Park_Bed_difuse2 - bk2.png
+D:\Users\mfs15\Downloads\1622695.5a5b11306aa7c\Poliform_Park_Bed\maps\Poliform_Park_Bed_velvet_bump.jpg
+D:\Users\mfs15\Downloads\1622695.5a5b11306aa7c\Poliform_Park_Bed\maps\Poliform_Park_Bed_frame_16.jpg
+D:\Users\mfs15\Downloads\526239.570ec4040fdcd\NEWEST\wood_newest_d.jpg
+D:\Users\mfs15\Downloads\526239.570ec4040fdcd\NEWEST\wood_newest_b.jpg
+D:\Users\mfs15\Downloads\526239.570ec4040fdcd\NEWEST\flou Letto_MIX.png
+D:\Users\mfs15\Downloads\526239.570ec4040fdcd\NEWEST\flou Letto_difuse2.jpg
+D:\Users\mfs15\Downloads\526239.570ec4040fdcd\NEWEST\flou Letto_difuse2.png
