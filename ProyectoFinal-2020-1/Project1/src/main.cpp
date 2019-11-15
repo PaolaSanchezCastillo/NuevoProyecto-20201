@@ -67,6 +67,7 @@ Sphere skyboxSphere(20, 20);
 Cylinder cylinder1(20, 20, 0.5, 0.5);
 Cylinder cylinder2(20, 20, 0.5, 0.5);
 Cylinder cylinderMaterials(20, 20, 0.5, 0.5);
+Cylinder pata(20, 20, 0.5, 0.5), pataSilla(20, 20, 0.5, 0.5);
 
 Box techo;
 
@@ -159,7 +160,6 @@ Model modelMesa;
 
 //HABITACION
 
-Model modelCama;
 Model modelBuro;
 
 Model autoEclipse;
@@ -204,6 +204,10 @@ GLuint textureID7A, textureID8A, textureID9A, textureID10A, textureID11A, textur
 GLuint textureID14A; 
 GLuint textureID15A, textureID16A, textureID17A, textureID18A, textureID19A, textureID20A, textureID21A; 
 GLuint skyboxTextureID;
+GLuint textureID1, textureID2, textureID3, textureID4, textureID5, textureIDCocina, textureIDPared, textureIDParedInter,
+textureIDEstufa, textureIDEstufaSup, textureIDRefri, textureIDRefriSup, textureIDAzulejos, textureIDPasto, textureIDSofa,
+textureIDCarretera, textureIDPuerta, textureIDPuertaBanio, textureIDPisoAzulejos, textureIDTv, textureIDVela,
+textureIDMueble, textureIDVentana, textureIDPisoBanio, textureIDTierra, textureIDPapel, textureIDPapelPicado;
 
 GLenum types[6] = {
 	GL_TEXTURE_CUBE_MAP_POSITIVE_X,
@@ -496,9 +500,6 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	mesa2.setShader(&shaderMulLighting);
 
 	//Halloween
-
-	velas.init();
-	velas.setShader(&shaderMulLighting);
 
 	pared1.init();
 	// Settea el shader a utilizar
@@ -1543,9 +1544,9 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	// Definiendo la textura a utilizar
 	Texture texture1("../Textures/losetas.jpg");
 	// Carga el mapa de bits (FIBITMAP es el tipo de dato de la libreria)
-	FIBITMAP *bitmap = texture1.loadImage();
+	bitmap = texture1.loadImage();
 	// Convertimos el mapa de bits en un arreglo unidimensional de tipo unsigned char
-	unsigned char *data = texture1.convertToData(bitmap, imageWidth,
+	data = texture1.convertToData(bitmap, imageWidth,
 		imageHeight);
 	// Creando la textura con id 1
 	glGenTextures(1, &textureID1);
@@ -4603,7 +4604,7 @@ void applicationLoop() {
 		glBindTexture(GL_TEXTURE_2D, textureID12A);
 		//le cambiamos el shader con multiplesluces NO OLVIDAR
 	//shaderMulLighting.setFloat("offsetX", offX);
-		mesa1.render(modelMesa);
+		mesa.render(modelMesa);
 		glBindTexture(GL_TEXTURE_2D, 0);
 		//	shaderMulLighting.setFloat("offsetX", 0);
 
