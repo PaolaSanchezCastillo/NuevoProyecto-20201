@@ -38,6 +38,8 @@
 int screenWidth;
 int screenHeight;
 
+bool cameraSel = 0;
+
 GLFWwindow *window;
 
 Shader shader;
@@ -57,6 +59,7 @@ Shader shaderSkybox;
 Shader shaderMulLighting;
 
 std::shared_ptr<FirstPersonCamera> camera(new FirstPersonCamera());
+std::shared_ptr<FirstPersonCamera> camera2(new FirstPersonCamera());
 
 Sphere sphere1(20, 20);
 Sphere sphere2(20, 20);
@@ -198,8 +201,9 @@ Model horno;
 
 // habitacion
 
+Model modelTorreRegalos;
 
-
+glm::mat4 view;
 
 GLuint textureID0, textureID1A, textureID2A, textureID3A, textureID4A, textureID5A, textureID6A;
 GLuint textureID7A, textureID8A, textureID9A, textureID10A, textureID11A, textureID12A, textureID13A;
@@ -625,7 +629,7 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	modelRock.loadModel("../models/railroad/railroad_track.obj");
 	modelRock.setShader(&shaderMulLighting);
 
-	modelCama.loadModel("../models/cama/Snooze_OBJ.obj");
+	modelCama.loadModel("../models/bed/Full_Size_Bed_with_White_Sheets_Black_V1.obj");
 	modelCama.setShader(&shaderMulLighting);
 
 	modelHelicoptero.loadModel("../models/Helicopter/Mi_24.obj");
@@ -639,6 +643,9 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 
 	modelBuro.loadModel("../models/buro/Nightstand.obj");
 	modelBuro.setShader(&shaderMulLighting);
+
+	modelTorreRegalos.loadModel("../models/E/13495_Stack_of_Gifts_v2_L2.obj");
+	modelTorreRegalos.setShader(&shaderMulLighting);
 
 
 	//JUGUETE CARRO 
@@ -762,6 +769,7 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 
 
 	camera->setPosition(glm::vec3(-5.0, 0.0, 2.0));
+	camera2->setPosition(glm::vec3(-8.0, 0.2, -4.0));
 
 	// Descomentar
 	// Definimos el tamanio de la imagen
@@ -2551,19 +2559,38 @@ bool processInput(bool continueApplication) {
 		return false;
 	}
 
-	TimeManager::Instance().CalculateFrameRate(false);
-	deltaTime = TimeManager::Instance().DeltaTime;
 
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		camera->moveFrontCamera(true, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		camera->moveFrontCamera(false, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+		if (cameraSel == 0)
+			camera->moveFrontCamera(false, deltaTime);
+		else if (cameraSel == 1)
+			camera2->moveFrontCamera(true, deltaTime);
+	}
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+		if (cameraSel == 0)
+			camera->moveFrontCamera(false, deltaTime);
+		else if (cameraSel == 1)
+			camera2->moveFrontCamera(true, deltaTime);
+	}
+
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		camera->moveRightCamera(false, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		camera->moveRightCamera(true, deltaTime);
+	{
+		if (cameraSel == 0)
+			camera->moveFrontCamera(false, deltaTime);
+		else if (cameraSel == 1)
+			camera2->moveFrontCamera(true, deltaTime);
+	}
+		
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+		if (cameraSel == 0)
+			camera->moveFrontCamera(false, deltaTime);
+		else if (cameraSel == 1)
+			camera2->moveFrontCamera(true, deltaTime);
+	}
+
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
-		camera->mouseMoveCamera(offsetX, offsetY, 0.01);
+		camera->mouseMoveCamera(offsetX, offsetY, deltaTime);
+		
 	offsetX = 0;
 	offsetY = 0;
 
@@ -2657,6 +2684,13 @@ bool processInput(bool continueApplication) {
 	else if (modelSelected == 2 && glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
 		advanceDartBody = 0.02;
 
+	if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS) {
+		cameraSel = 1;
+	}
+	if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) {
+		cameraSel = 0;
+	}
+
 	glfwPollEvents();
 	return continueApplication;
 
@@ -2720,15 +2754,31 @@ void applicationLoop() {
 	matrixModelHelicoptero = glm::scale(matrixModelHelicoptero, glm::vec3(0.1, 0.1, 0.1));
 	matrixModelHelicoptero = glm::translate(matrixModelHelicoptero, glm::vec3(-20.0, 5.0, 0.0));
 
+	lastTime = TimeManager::Instance().GetTime();
 
 	while (psi) {
+
+		currTime = TimeManager::Instance().GetTime();
+		if (currTime - lastTime < 0.016666667) {
+			glfwPollEvents();
+			continue;
+		}
+		lastTime = currTime;
+		TimeManager::Instance().CalculateFrameRate(true);
+		deltaTime = TimeManager::Instance().DeltaTime;
 
 		psi = processInput(true);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glm::mat4 projection = glm::perspective(glm::radians(45.0f),
 			(float)screenWidth / (float)screenHeight, 0.01f, 100.0f);
-		glm::mat4 view = camera->getViewMatrix();
+
+		if (cameraSel == 0)
+			view = camera->getViewMatrix();
+		if (cameraSel == 1)
+			view = camera2->getViewMatrix();
+
+		//glm::mat4 view = camera->getViewMatrix();
 
 		// Settea la matriz de vista y projection al shader con solo color
 		shader.setMatrix4("projection", 1, false, glm::value_ptr(projection));
@@ -3026,7 +3076,7 @@ void applicationLoop() {
 		sphereLamp.setColor(glm::vec4(0.0, 0.0, 1.0, 1.0));
 		sphereLamp.render();
 
-
+/*
 		//CARRO ECLIPSE BASICO
 		shaderMulLighting.setVectorFloat2("scaleUV", glm::value_ptr(glm::vec2(0.0, 0.0)));
 		autoEclipse.render(matrixModelAuto);
@@ -3036,7 +3086,7 @@ void applicationLoop() {
 		modelHelicoptero.render(matrixModelHelicoptero);
 		glActiveTexture(GL_TEXTURE0);
 
-
+*/
 
 		glm::mat4 lightModelmatrix = glm::rotate(glm::mat4(1.0f), angle,
 			glm::vec3(1.0f, 0.0f, 0.0f));
@@ -3457,13 +3507,12 @@ void applicationLoop() {
 
 		//---------------- HABITACION --------------------------------------------
 
-		//Models complex render
 		glm::mat4 matrixModelCama0 = glm::mat4(1.0);
-		matrixModelCama0 = glm::translate(matrixModelCama0, glm::vec3(0.0, -2.0, 2.0));
-		matrixModelCama0 = glm::scale(matrixModelCama0, glm::vec3(0.002, 0.002, 0.002));
-		matrixModelCama0 = glm::rotate(matrixModelCama0, 55.0f, glm::vec3(1.0, 0.0, 0.0));
+		matrixModelCama0 = glm::translate(matrixModelCama0, glm::vec3(2.0, -1.0, -2.0));
+		matrixModelCama0 = glm::rotate(matrixModelCama0, glm::radians(-90.0f), glm::vec3(1.0, 0.0, 0.0));
+		matrixModelCama0 = glm::scale(matrixModelCama0, glm::vec3(0.02, 0.02, 0.02));
 		modelCama.render(matrixModelCama0);
-		//Forze to enable the unit texture to 0 always-------------------------modelCAMA
+		// Forze to enable the unit texture to 0 always ----------------- IMPORTANT
 		glActiveTexture(GL_TEXTURE0);
 
 
@@ -3477,6 +3526,27 @@ void applicationLoop() {
 		modelTree.render(matrixModelTree);
 		//Forze to enable the unit texture to 0 always-------------------------IMPORTANT
 		glActiveTexture(GL_TEXTURE0);
+		
+
+		//				TORRE DE REGALOS ////
+
+		glm::mat4 matrixModelRegalos = glm::mat4(1.0);
+		matrixModelRegalos = glm::translate(matrixModelRegalos, glm::vec3(-13.0, -2.0, -3.5));
+		matrixModelRegalos = glm::rotate(matrixModelRegalos, glm::radians(-90.0f), glm::vec3(1.0, 0.0, 0.0));
+		matrixModelRegalos = glm::scale(matrixModelRegalos, glm::vec3(0.01, 0.01, 0.01));
+		modelTorreRegalos.render(matrixModelRegalos);
+		// Forze to enable the unit texture to 0 always ----------------- IMPORTANT
+		glActiveTexture(GL_TEXTURE0);
+
+		glm::mat4 matrixModelRegalos2 = glm::mat4(1.0);
+		matrixModelRegalos2 = glm::translate(matrixModelRegalos2, glm::vec3(-5.0, -2.0, -3.5));
+		matrixModelRegalos2 = glm::rotate(matrixModelRegalos2, glm::radians(-90.0f), glm::vec3(1.0, 0.0, 0.0));
+		matrixModelRegalos2 = glm::scale(matrixModelRegalos2, glm::vec3(0.01, 0.01, 0.01));
+		modelTorreRegalos.render(matrixModelRegalos2);
+		// Forze to enable the unit texture to 0 always ----------------- IMPORTANT
+		glActiveTexture(GL_TEXTURE0);
+
+
 		//=============== mesa cocina ===============
 
 
