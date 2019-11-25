@@ -769,7 +769,7 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 
 
 	camera->setPosition(glm::vec3(-5.0, 0.0, 2.0));
-	camera2->setPosition(glm::vec3(-8.0, 0.2, -4.0));
+	camera2->setPosition(glm::vec3(70, 2.0, -1));
 
 	// Descomentar
 	// Definimos el tamanio de la imagen
@@ -2523,8 +2523,11 @@ void keyCallback(GLFWwindow *window, int key, int scancode, int action,
 	int mode) {
 	if (action == GLFW_PRESS) {
 		switch (key) {
-		case GLFW_KEY_ESCAPE:
+		case GLFW_KEY_ESCAPE:			//camara caso de navidad
 			exitApp = true;
+			break;
+		case GLFW_KEY_0:				//camara casa de terror
+			cameraSel = 1;
 			break;
 		}
 	}
@@ -2559,10 +2562,12 @@ bool processInput(bool continueApplication) {
 		return false;
 	}
 
+	TimeManager::Instance().CalculateFrameRate(false);
+	deltaTime = TimeManager::Instance().DeltaTime;
 
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
 		if (cameraSel == 0)
-			camera->moveFrontCamera(false, deltaTime);
+			camera->moveFrontCamera(true, deltaTime);
 		else if (cameraSel == 1)
 			camera2->moveFrontCamera(true, deltaTime);
 	}
@@ -2570,27 +2575,27 @@ bool processInput(bool continueApplication) {
 		if (cameraSel == 0)
 			camera->moveFrontCamera(false, deltaTime);
 		else if (cameraSel == 1)
-			camera2->moveFrontCamera(true, deltaTime);
+			camera2->moveFrontCamera(false, deltaTime);
 	}
-
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-	{
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
 		if (cameraSel == 0)
-			camera->moveFrontCamera(false, deltaTime);
+			camera->moveRightCamera(false, deltaTime);
 		else if (cameraSel == 1)
-			camera2->moveFrontCamera(true, deltaTime);
+			camera2->moveRightCamera(false, deltaTime);
 	}
-		
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
 		if (cameraSel == 0)
-			camera->moveFrontCamera(false, deltaTime);
+			camera->moveRightCamera(true, deltaTime);
 		else if (cameraSel == 1)
-			camera2->moveFrontCamera(true, deltaTime);
+			camera2->moveRightCamera(true, deltaTime);
+	}
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+		if (cameraSel == 0)
+			camera->mouseMoveCamera(offsetX, offsetY, deltaTime);
+		else if (cameraSel == 1)
+			camera2->mouseMoveCamera(offsetX, offsetY, deltaTime);
 	}
 
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
-		camera->mouseMoveCamera(offsetX, offsetY, deltaTime);
-		
 	offsetX = 0;
 	offsetY = 0;
 
@@ -2757,18 +2762,12 @@ void applicationLoop() {
 	lastTime = TimeManager::Instance().GetTime();
 
 	while (psi) {
-
-		currTime = TimeManager::Instance().GetTime();
-		if (currTime - lastTime < 0.016666667) {
-			glfwPollEvents();
-			continue;
-		}
-		lastTime = currTime;
-		TimeManager::Instance().CalculateFrameRate(true);
-		deltaTime = TimeManager::Instance().DeltaTime;
-
 		psi = processInput(true);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		// Variables donde se guardan las matrices de cada articulacion por 1 frame
+		std::vector<float> matrixDartJoints;
+		std::vector<glm::mat4> matrixDart;
 
 		glm::mat4 projection = glm::perspective(glm::radians(45.0f),
 			(float)screenWidth / (float)screenHeight, 0.01f, 100.0f);
@@ -2777,8 +2776,6 @@ void applicationLoop() {
 			view = camera->getViewMatrix();
 		if (cameraSel == 1)
 			view = camera2->getViewMatrix();
-
-		//glm::mat4 view = camera->getViewMatrix();
 
 		// Settea la matriz de vista y projection al shader con solo color
 		shader.setMatrix4("projection", 1, false, glm::value_ptr(projection));
@@ -3076,7 +3073,7 @@ void applicationLoop() {
 		sphereLamp.setColor(glm::vec4(0.0, 0.0, 1.0, 1.0));
 		sphereLamp.render();
 
-/*
+
 		//CARRO ECLIPSE BASICO
 		shaderMulLighting.setVectorFloat2("scaleUV", glm::value_ptr(glm::vec2(0.0, 0.0)));
 		autoEclipse.render(matrixModelAuto);
@@ -3086,7 +3083,6 @@ void applicationLoop() {
 		modelHelicoptero.render(matrixModelHelicoptero);
 		glActiveTexture(GL_TEXTURE0);
 
-*/
 
 		glm::mat4 lightModelmatrix = glm::rotate(glm::mat4(1.0f), angle,
 			glm::vec3(1.0f, 0.0f, 0.0f));
