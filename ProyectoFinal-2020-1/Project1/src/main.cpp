@@ -226,12 +226,12 @@ GLenum types[6] = {
 	GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
 	GL_TEXTURE_CUBE_MAP_NEGATIVE_Z };
 
-std::string fileNames[6] = { "../Textures/mp_bloodvalley/blood-valley_ft.tga",
-"../Textures/mp_bloodvalley/blood-valley_bk.tga",
-"../Textures/mp_bloodvalley/blood-valley_up.tga",
-"../Textures/mp_bloodvalley/blood-valley_dn.tga",
-"../Textures/mp_bloodvalley/blood-valley_rt.tga",
-"../Textures/mp_bloodvalley/blood-valley_lf.tga" };
+std::string fileNames[6] = { "../Textures/mp_sandcastle/sandcastle_ft.tga",
+"../Textures/mp_sandcastle/sandcastle_bk.tga",
+"../Textures/mp_sandcastle/sandcastle_up.tga",
+"../Textures/mp_sandcastle/sandcastle_dn.tga",
+"../Textures/mp_sandcastle/sandcastle_rt.tga",
+"../Textures/mp_sandcastle/sandcastle_lf.tga" };
 
 bool exitApp = false;
 int lastMousePosX, offsetX = 0;
@@ -2603,6 +2603,19 @@ bool processInput(bool continueApplication) {
 	offsetY = 0;
 
 	// Descomentar
+	// Seleccionar modelo
+	if (enableCountSelected && glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS) {
+		enableCountSelected = false;
+		modelSelected++;
+		if (modelSelected == 2)
+			fileName = "../animaciones/animation_dart.txt";
+		std::cout << "modelSelected:" << modelSelected << std::endl;
+	}
+	else if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_RELEASE)
+		enableCountSelected = true;
+
+
+	// Descomentar
 	// Guardar key frames
 	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS
 		&& glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
@@ -2746,7 +2759,7 @@ void applicationLoop() {
 	matrixModelAircraft = glm::scale(matrixModelAircraft, glm::vec3(0.1, 0.1, 0.1));
 	matrixModelAircraft = glm::translate(matrixModelAircraft, glm::vec3(-35, -15.0, 0.0));
 	glm::mat4 matrixModelEclipse = glm::mat4(1.0);
-	matrixModelEclipse = glm::translate(matrixModelEclipse, glm::vec3(70.0, 0.0, 21.0));
+	matrixModelEclipse = glm::translate(matrixModelEclipse, glm::vec3(65.0, 0.0, 21.0));
 	matrixModelEclipse = glm::rotate(matrixModelEclipse, glm::radians(90.0f), glm::vec3(0.0, 1.0, 0.0));
 	glm::mat4 matrixModelHeli = glm::mat4(1.0);
 	matrixModelHeli = glm::translate(matrixModelHeli, glm::vec3(75.0, 0.0, 12.0));
@@ -3757,7 +3770,7 @@ void applicationLoop() {
 			modelMatrixDart = interpolate(keyFramesDart, indexFrameDart, indexFrameDartNext, 0, interpolationDart);
 		}
 
-
+		
 
 
 		//**********************************************primitivas hallowen***************************************************************
@@ -3801,7 +3814,7 @@ void applicationLoop() {
 		patioTra = glm::translate(pisoTra, glm::vec3(0, 0, -10));
 		// Usamos la textura ID 
 		glBindTexture(GL_TEXTURE_2D, textureIDTierra);
-		piso2.render(glm::scale(patioTra, glm::vec3(20.0, 0.1, 10)));
+		piso2.render(glm::scale(patioTra, glm::vec3(2.0, 0.1, 10)));
 		// No utilizar ninguna textura
 		glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -3809,7 +3822,8 @@ void applicationLoop() {
 		carretera = glm::translate(pasto, glm::vec3(0, 0, 10));
 		// Usamos la textura ID 
 		glBindTexture(GL_TEXTURE_2D, textureIDCarretera);
-		piso3.render(glm::scale(carretera, glm::vec3(25.0, 0.1, 5)));
+
+		piso3.render(glm::scale(carretera, glm::vec3(60.0, 0.5, 5)));
 		//Descomentar
 		// No utilizar ninguna textura
 		glBindTexture(GL_TEXTURE_2D, 0);
@@ -4636,12 +4650,6 @@ void applicationLoop() {
 		//Descomentar
 		// No utilizar ninguna textura
 		glBindTexture(GL_TEXTURE_2D, 0);
-
-		/*glm::mat4 matrixModelVela = glm::mat4(1.0);
-		matrixModelVela = glm::translate(matrixModelMesaOfrenda, glm::vec3(0, 1.6, 0));
-		modelVela.render(glm::scale(matrixModelVela, glm::vec3(0.05, 0.05, 0.05)));
-		// Forze to enable the unit texture to 0 always ----------------- IMPORTANT
-		glActiveTexture(GL_TEXTURE0);*/
 
 		glm::mat4 matrixModelVela2 = glm::mat4(1.0);
 		matrixModelVela2 = glm::translate(matrixModelMesaOfrenda, glm::vec3(0, 1.6, 1.5));
