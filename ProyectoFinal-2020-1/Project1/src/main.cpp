@@ -33,6 +33,8 @@
 //include loader model class
 #include "Headers/Model.h"
 
+#include "Headers/AnimationUtils.h"
+
 #define ARRAY_SIZE_IN_ELEMENTS(a) (sizeof(a)/sizeof(a[0]))
 
 int screenWidth;
@@ -202,6 +204,7 @@ Model horno;
 // habitacion
 
 Model modelTorreRegalos;
+
 
 glm::mat4 view;
 
@@ -2599,6 +2602,31 @@ bool processInput(bool continueApplication) {
 	offsetX = 0;
 	offsetY = 0;
 
+	// Descomentar
+	// Guardar key frames
+	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS
+		&& glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
+		record = true;
+		if (myfile.is_open())
+			myfile.close();
+		myfile.open(fileName);
+	}
+	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE
+		&& glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
+		record = false;
+		myfile.close();
+		if (modelSelected == 1)
+			keyFramesDartJoints = getKeyRotFrames(fileName);
+		if (modelSelected == 2)
+			keyFramesDart = getKeyFrames(fileName);
+	}
+	if (availableSave && glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS) {
+		saveFrame = true;
+		availableSave = false;
+	}if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_RELEASE)
+		availableSave = true;
+
+
 	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 		sentido = false;
 
@@ -2742,7 +2770,7 @@ void applicationLoop() {
 
 	glm::mat4 modelMatrixEclipse2 = glm::mat4(1.0f);
 	modelMatrixEclipse2 = glm::scale(modelMatrixEclipse2, glm::vec3(0.08, 0.08, 0.08));
-	modelMatrixEclipse2 = glm::translate(modelMatrixEclipse2, glm::vec3(-25, -15.0, 0.0));
+	modelMatrixEclipse2 = glm::translate(modelMatrixEclipse2, glm::vec3(-20, -15.0, 0.0));
 	int stateAuto = 0;
 	float advanceCount = 0.0;
 	float rotCount = 0.0;
@@ -2758,6 +2786,16 @@ void applicationLoop() {
 	glm::mat4 matrixModelHelicoptero = glm::mat4(1.0);
 	matrixModelHelicoptero = glm::scale(matrixModelHelicoptero, glm::vec3(0.1, 0.1, 0.1));
 	matrixModelHelicoptero = glm::translate(matrixModelHelicoptero, glm::vec3(-20.0, 5.0, 0.0));
+
+	glm::mat4 modelMatrixDart = glm::mat4(1.0f);
+	modelMatrixDart = glm::translate(modelMatrixDart, glm::vec3(11.0, -2.0, -1.5));
+	modelMatrixDart = glm::scale(modelMatrixDart, glm::vec3(0.5, 0.5, 0.5));
+
+	// Descomentar
+	// Variables to interpolation key frames
+	fileName = "../animaciones/animation_dart_joints.txt";
+	keyFramesDartJoints = getKeyRotFrames(fileName);
+	keyFramesDart = getKeyFrames("../animaciones/animation_dart.txt");
 
 	lastTime = TimeManager::Instance().GetTime();
 
@@ -3605,6 +3643,120 @@ void applicationLoop() {
 		modelBuro.render(matBuro);
 		//FORCE TO ENABLE THE UNIT TEXTURE TO 0 ALWAYS .............. IMPORTANT
 		glActiveTexture(GL_TEXTURE0);
+
+		//animacion
+
+		// Dart lego
+		// Se deshabilita el cull faces IMPORTANTE para la capa
+		glDisable(GL_CULL_FACE);
+		modelDartLegoBody.render(modelMatrixDart);
+		glm::mat4 modelMatrixDartHead = glm::mat4(modelMatrixDart);
+		modelMatrixDartHead = glm::rotate(modelMatrixDartHead, rotDartHead, glm::vec3(0, 1, 0));
+		modelDartLegoHead.render(modelMatrixDartHead);
+		modelDartLegoMask.render(modelMatrixDartHead);
+		glm::mat4 modelMatrixDartLeftArm = glm::mat4(modelMatrixDart);
+		modelMatrixDartLeftArm = glm::translate(modelMatrixDartLeftArm, glm::vec3(-0.023515, 2.43607, 0.446066));
+		modelMatrixDartLeftArm = glm::rotate(modelMatrixDartLeftArm, glm::radians(-5.0f), glm::vec3(1, 0, 0));
+		modelMatrixDartLeftArm = glm::rotate(modelMatrixDartLeftArm, rotDartLeftArm, glm::vec3(0, 0, 1));
+		modelMatrixDartLeftArm = glm::rotate(modelMatrixDartLeftArm, glm::radians(5.0f), glm::vec3(1, 0, 0));
+		modelMatrixDartLeftArm = glm::translate(modelMatrixDartLeftArm, glm::vec3(0.023515, -2.43607, -0.446066));
+		modelDartLegoLeftArm.render(modelMatrixDartLeftArm);
+		glm::mat4 modelMatrixDartLeftHand = glm::mat4(modelMatrixDartLeftArm);
+		modelMatrixDartLeftHand = glm::translate(modelMatrixDartLeftHand, glm::vec3(0.201343, 1.68317, 0.99774));
+		modelMatrixDartLeftHand = glm::rotate(modelMatrixDartLeftHand, glm::radians(-5.0f), glm::vec3(1, 0, 0));
+		modelMatrixDartLeftHand = glm::rotate(modelMatrixDartLeftHand, rotDartLeftHand, glm::vec3(0, 1, 0));
+		modelMatrixDartLeftHand = glm::rotate(modelMatrixDartLeftHand, glm::radians(5.0f), glm::vec3(1, 0, 0));
+		modelMatrixDartLeftHand = glm::translate(modelMatrixDartLeftHand, glm::vec3(-0.201343, -1.68317, -0.99774));
+		modelDartLegoLeftHand.render(modelMatrixDartLeftHand);
+		glm::mat4 modelMatrixDartRightArm = glm::mat4(modelMatrixDart);
+		modelMatrixDartRightArm = glm::translate(modelMatrixDartRightArm, glm::vec3(-0.023515, 2.43607, -0.446066));
+		modelMatrixDartRightArm = glm::rotate(modelMatrixDartRightArm, glm::radians(5.0f), glm::vec3(1, 0, 0));
+		modelMatrixDartRightArm = glm::rotate(modelMatrixDartRightArm, rotDartRightArm, glm::vec3(0, 0, 1));
+		modelMatrixDartRightArm = glm::rotate(modelMatrixDartRightArm, glm::radians(-5.0f), glm::vec3(1, 0, 0));
+		modelMatrixDartRightArm = glm::translate(modelMatrixDartRightArm, glm::vec3(0.023515, -2.43607, 0.446066));
+		modelDartLegoRightArm.render(modelMatrixDartRightArm);
+		glm::mat4 modelMatrixDartRightHand = glm::mat4(modelMatrixDartRightArm);
+		modelMatrixDartRightHand = glm::translate(modelMatrixDartRightHand, glm::vec3(0.201343, 1.68317, -0.99774));
+		modelMatrixDartRightHand = glm::rotate(modelMatrixDartRightHand, glm::radians(5.0f), glm::vec3(1, 0, 0));
+		modelMatrixDartRightHand = glm::rotate(modelMatrixDartRightHand, rotDartRightHand, glm::vec3(0, 1, 0));
+		modelMatrixDartRightHand = glm::rotate(modelMatrixDartRightHand, glm::radians(-5.0f), glm::vec3(1, 0, 0));
+		modelMatrixDartRightHand = glm::translate(modelMatrixDartRightHand, glm::vec3(-0.201343, -1.68317, 0.99774));
+		modelDartLegoRightHand.render(modelMatrixDartRightHand);
+		glm::mat4 modelMatrixDartLeftLeg = glm::mat4(modelMatrixDart);
+		modelMatrixDartLeftLeg = glm::translate(modelMatrixDartLeftLeg, glm::vec3(0, 1.12632, 0.423349));
+		modelMatrixDartLeftLeg = glm::rotate(modelMatrixDartLeftLeg, rotDartLeftLeg, glm::vec3(0, 0, 1));
+		modelMatrixDartLeftLeg = glm::translate(modelMatrixDartLeftLeg, glm::vec3(0, -1.12632, -0.423349));
+		modelDartLegoLeftLeg.render(modelMatrixDartLeftLeg);
+		glm::mat4 modelMatrixDartRightLeg = glm::mat4(modelMatrixDart);
+		modelMatrixDartRightLeg = glm::translate(modelMatrixDartRightLeg, glm::vec3(0, 1.12632, -0.423349));
+		modelMatrixDartRightLeg = glm::rotate(modelMatrixDartRightLeg, rotDartRightLeg, glm::vec3(0, 0, 1));
+		modelMatrixDartRightLeg = glm::translate(modelMatrixDartRightLeg, glm::vec3(0, -1.12632, 0.423349));
+		modelDartLegoRightLeg.render(modelMatrixDartRightLeg);
+		glActiveTexture(GL_TEXTURE0); // IMPORTANTE regresar a la textura 0
+		// Se regresa el cull faces IMPORTANTE para la capa
+		glEnable(GL_CULL_FACE);
+
+		// Para salvar el frame
+		if (record && modelSelected == 1) {
+			matrixDartJoints.push_back(rotDartHead);
+			matrixDartJoints.push_back(rotDartLeftArm);
+			matrixDartJoints.push_back(rotDartLeftHand);
+			matrixDartJoints.push_back(rotDartRightArm);
+			matrixDartJoints.push_back(rotDartRightHand);
+			matrixDartJoints.push_back(rotDartLeftLeg);
+			matrixDartJoints.push_back(rotDartRightLeg);
+			if (saveFrame) {
+				appendFrame(myfile, matrixDartJoints);
+				saveFrame = false;
+			}
+		}
+		else if (keyFramesDartJoints.size() > 0) {
+			// Para reproducir el frame
+			interpolationDartJoints = numPasosDartJoints / (float)maxNumPasosDartJoints;
+			numPasosDartJoints++;
+			if (interpolationDartJoints > 1.0) {
+				numPasosDartJoints = 0;
+				interpolationDartJoints = 0;
+				indexFrameDartJoints = indexFrameDartJointsNext;
+				indexFrameDartJointsNext++;
+			}
+			if (indexFrameDartJointsNext > keyFramesDartJoints.size() - 1)
+				indexFrameDartJointsNext = 0;
+
+			rotDartHead = interpolate(keyFramesDartJoints, indexFrameDartJoints, indexFrameDartJointsNext, 0, interpolationDartJoints);
+			rotDartLeftArm = interpolate(keyFramesDartJoints, indexFrameDartJoints, indexFrameDartJointsNext, 1, interpolationDartJoints);
+			rotDartLeftHand = interpolate(keyFramesDartJoints, indexFrameDartJoints, indexFrameDartJointsNext, 2, interpolationDartJoints);
+			rotDartRightArm = interpolate(keyFramesDartJoints, indexFrameDartJoints, indexFrameDartJointsNext, 3, interpolationDartJoints);
+			rotDartRightHand = interpolate(keyFramesDartJoints, indexFrameDartJoints, indexFrameDartJointsNext, 4, interpolationDartJoints);
+			rotDartLeftLeg = interpolate(keyFramesDartJoints, indexFrameDartJoints, indexFrameDartJointsNext, 5, interpolationDartJoints);
+			rotDartRightLeg = interpolate(keyFramesDartJoints, indexFrameDartJoints, indexFrameDartJointsNext, 6, interpolationDartJoints);
+		}
+
+		if (record && modelSelected == 2) {
+			modelMatrixDart = glm::translate(modelMatrixDart, glm::vec3(advanceDartBody, 0.0, 0.0));
+			modelMatrixDart = glm::rotate(modelMatrixDart, rotDartBody, glm::vec3(0, 1, 0));
+			matrixDart.push_back(modelMatrixDart);
+			if (saveFrame) {
+				appendFrame(myfile, matrixDart);
+				saveFrame = false;
+			}
+		}
+		else if (keyFramesDart.size() > 0) {
+			// Para reproducir el frame
+			interpolationDart = numPasosDart / (float)maxNumPasosDart;
+			numPasosDart++;
+			if (interpolationDart > 1.0) {
+				numPasosDart = 0;
+				interpolationDart = 0;
+				indexFrameDart = indexFrameDartNext;
+				indexFrameDartNext++;
+			}
+			if (indexFrameDartNext > keyFramesDart.size() - 1)
+				indexFrameDartNext = 0;
+
+			modelMatrixDart = interpolate(keyFramesDart, indexFrameDart, indexFrameDartNext, 0, interpolationDart);
+		}
+
 
 
 
@@ -4835,7 +4987,16 @@ void applicationLoop() {
 			break;
 		}
 
+		// Constantes de animaciones
+		if (angle > 2 * M_PI)
+			angle = 0.0;
+		else
+			angle += 0.01;
 
+
+		// Descomentar
+		advanceDartBody = 0.0;
+		rotDartBody = 0.0;
 
 		/*******************************************
 		 * State machines
