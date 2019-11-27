@@ -2750,7 +2750,7 @@ void applicationLoop() {
 	float offX = 0.0;
 	float angle = 0.0;
 	float ratio = 5.0;
-	int state = 0, state2 = 0; //se agregan variables para el movimiento 
+	int state = 0, state2 = 0, stateLich=0; //se agregan variables para el movimiento 
 	int estadoHelicoptero = 0;
 
 	float angle2 = 0.0;
@@ -2759,22 +2759,28 @@ void applicationLoop() {
 	matrixModelAircraft = glm::scale(matrixModelAircraft, glm::vec3(0.1, 0.1, 0.1));
 	matrixModelAircraft = glm::translate(matrixModelAircraft, glm::vec3(-35, -15.0, 0.0));
 	glm::mat4 matrixModelEclipse = glm::mat4(1.0);
-	matrixModelEclipse = glm::translate(matrixModelEclipse, glm::vec3(65.0, 0.0, 21.0));
+	matrixModelEclipse = glm::translate(matrixModelEclipse, glm::vec3(70.0, 0.2, 21.0));
 	matrixModelEclipse = glm::rotate(matrixModelEclipse, glm::radians(90.0f), glm::vec3(0.0, 1.0, 0.0));
+
+	glm::mat4 matrixModelLich = glm::mat4(1.0);
+	matrixModelLich = glm::translate(matrixModelLich, glm::vec3(70, 1.75, -15));
+	matrixModelLich = glm::rotate(matrixModelLich, glm::radians(270.0f), glm::vec3(0.0, 1.0, 0));
+
 	glm::mat4 matrixModelHeli = glm::mat4(1.0);
 	matrixModelHeli = glm::translate(matrixModelHeli, glm::vec3(75.0, 0.0, 12.0));
 	matrixModelHeli = glm::rotate(matrixModelHeli, glm::radians(90.0f), glm::vec3(0.0, 1.0, 0.0));
 	int stateAir = 0; //se agregan variables para el movimiento 
-	float offsetAircraftAdvance = 0.0;
+	float offsetAircraftAdvance = 0.0, offsetAircraftAdvance2 = 0.0;
 	float offsetAircraftRot = 0.0;
 	float offsetHeliAdvance = 0.0;
+	float offsetLich = 0.0;
 
 	//ESPECIFICACIONES DEL AUTO 
 
 	float offsetAutoAdvance = 0.0;
 	float offsetAutotRot = 0.0;
 	glm::mat4 matrixModelAuto = glm::mat4(1.0);
-	matrixModelAuto = glm::translate(matrixModelAuto, glm::vec3(40.0, 0.0, -40.0));
+	matrixModelAuto = glm::translate(matrixModelAuto, glm::vec3(40.0, -1.0, -40.0));
 	matrixModelAuto = glm::rotate(matrixModelAuto, 55.0f, glm::vec3(0.0, 1.0, 0.0));
 
 	//Auto de juguete
@@ -2784,7 +2790,7 @@ void applicationLoop() {
 	glm::mat4 modelMatrixEclipse2 = glm::mat4(1.0f);
 	modelMatrixEclipse2 = glm::scale(modelMatrixEclipse2, glm::vec3(0.08, 0.08, 0.08));
 	modelMatrixEclipse2 = glm::translate(modelMatrixEclipse2, glm::vec3(-20, -15.0, 0.0));
-	int stateAuto = 0;
+	int stateAuto = 0, stateEclipse = 0;
 	float advanceCount = 0.0;
 	float rotCount = 0.0;
 	float rotWheelsX = 0.0;
@@ -3181,14 +3187,6 @@ void applicationLoop() {
 		glActiveTexture(GL_TEXTURE0);
 
 
-
-
-
-
-
-
-
-
 		glm::mat4 modelAgua = glm::mat4(1.0);
 		modelAgua = glm::translate(modelAgua, glm::vec3(3.0, -2.0, 0.0));
 		modelAgua = glm::scale(modelAgua, glm::vec3(36.0, 0.0, 10.0));
@@ -3302,7 +3300,7 @@ void applicationLoop() {
 		// este es el regalo 
 
 		glm::mat4 modelRegalo = glm::mat4(1.0);
-		modelRegalo = glm::translate(modelRegalo, glm::vec3(-10.5, -2.0, -2.0));
+		modelRegalo = glm::translate(modelRegalo, glm::vec3(-10.5, -1.7, -2.0));
 		modelRegalo = glm::scale(modelRegalo, glm::vec3(0.7, 0.7, 0.7));
 		// Se activa la textura del agua
 		glBindTexture(GL_TEXTURE_2D, textureID16A);
@@ -3313,7 +3311,7 @@ void applicationLoop() {
 		//shaderMulLighting.setFloat("offsetX", 0);
 
 		glm::mat4 modelRegalo2 = glm::mat4(1.0);
-		modelRegalo2 = glm::translate(modelRegalo2, glm::vec3(-8.5, -2.0, -2.0));
+		modelRegalo2 = glm::translate(modelRegalo2, glm::vec3(-8.5, -1.7, -2.0));
 		modelRegalo2 = glm::scale(modelRegalo2, glm::vec3(0.7, 0.7, 0.7));
 		// Se activa la textura del agua
 		glBindTexture(GL_TEXTURE_2D, textureID17A);
@@ -3568,7 +3566,7 @@ void applicationLoop() {
 
 		//Esto es para el modelo Tree
 		glm::mat4 matrixModelTree = glm::mat4(1.0);
-		matrixModelTree = glm::translate(matrixModelTree, glm::vec3(-10.0, -2.0, -3.5));
+		matrixModelTree = glm::translate(matrixModelTree, glm::vec3(-10.0, -1.8, -3.5));
 		matrixModelTree = glm::scale(matrixModelTree, glm::vec3(0.1, 0.1, 0.1));
 		modelTree.render(matrixModelTree);
 		//Forze to enable the unit texture to 0 always-------------------------IMPORTANT
@@ -3814,7 +3812,7 @@ void applicationLoop() {
 		patioTra = glm::translate(pisoTra, glm::vec3(0, 0, -10));
 		// Usamos la textura ID 
 		glBindTexture(GL_TEXTURE_2D, textureIDTierra);
-		piso2.render(glm::scale(patioTra, glm::vec3(2.0, 0.1, 10)));
+		piso2.render(glm::scale(patioTra, glm::vec3(20.0, 0.1, 10)));
 		// No utilizar ninguna textura
 		glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -4604,18 +4602,18 @@ void applicationLoop() {
 		glActiveTexture(GL_TEXTURE0);
 
 		glm::mat4 matrixModelCama = glm::mat4(1.0);
-		matrixModelCama = glm::translate(pisoMed, glm::vec3(-5.25, 0.05, 2.5));
+		matrixModelCama = glm::translate(pisoMed, glm::vec3(-7.25, 0.85, 0));
 		matrixModelCama = glm::rotate(matrixModelCama, glm::radians(90.0f), glm::vec3(0.0, 1.0, 0));
 		matrixModelCama = glm::rotate(matrixModelCama, glm::radians(270.0f), glm::vec3(1.0, 0.0, 0));
-		modelCama.render(glm::scale(matrixModelCama, glm::vec3(0.0018, 0.0018, 0.0018)));
+		modelCama.render(glm::scale(matrixModelCama, glm::vec3(0.018, 0.018, 0.018)));
 		// Forze to enable the unit texture to 0 always ----------------- IMPORTANT
 		glActiveTexture(GL_TEXTURE0);
 
 		glm::mat4 matrixModelCama2 = glm::mat4(1.0);
-		matrixModelCama2 = glm::translate(pisoMed, glm::vec3(8.0, 0.05, 0.25));
+		matrixModelCama2 = glm::translate(pisoMed, glm::vec3(6.0, 0.85, 2.5));
 		matrixModelCama2 = glm::rotate(matrixModelCama2, glm::radians(180.0f), glm::vec3(0, 1.0, 0.0));
 		matrixModelCama2 = glm::rotate(matrixModelCama2, glm::radians(270.0f), glm::vec3(1.0, 0.0, 0));
-		modelCama.render(glm::scale(matrixModelCama2, glm::vec3(0.0018, 0.0018, 0.0018)));
+		modelCama.render(glm::scale(matrixModelCama2, glm::vec3(0.018, 0.018, 0.018)));
 		// Forze to enable the unit texture to 0 always ----------------- IMPORTANT
 		glActiveTexture(GL_TEXTURE0);
 
@@ -4704,9 +4702,6 @@ void applicationLoop() {
 		glActiveTexture(GL_TEXTURE0);
 
 
-		glm::mat4 matrixModelLich = glm::mat4(1.0);
-		matrixModelLich = glm::translate(pisoTra, glm::vec3(0, 1.75, 0));
-		matrixModelLich = glm::rotate(matrixModelLich, glm::radians(270.0f), glm::vec3(0.0, 1.0, 0));
 		modelLich.render(glm::scale(matrixModelLich, glm::vec3(1, 1, 1)));
 		// Forze to enable the unit texture to 0 always ----------------- IMPORTANT
 		glActiveTexture(GL_TEXTURE0);
@@ -4837,57 +4832,6 @@ void applicationLoop() {
 		glActiveTexture(GL_TEXTURE0);
 
 
-		//// ------------------------- soFA --------------------------
-
-	//	   //fondo sofa
-	//	glm::mat4 modelsofa = glm::mat4(1.0);
-	//	modelsofa = glm::translate(modelsofa, glm::vec3(-5.0, -2.0, 2.5));
-	//	modelsofa = glm::scale(modelsofa, glm::vec3(2.8, 1.5, 1.5));
-	//	// se activa la textura del agua
-	//	glbindtexture(gl_texture_2d, textureid11);
-	//	//le cambiamos el shader con multiplesluces no olvidar
-	////shadermullighting.setfloat("offsetx", offx);
-	//	sofa.render(modelsofa);
-	//	glbindtexture(gl_texture_2d, 0);
-	//	//	shadermullighting.setfloat("offsetx", 0);
-
-	//		//fondo sofa
-	//	glm::mat4 modelsofasup = glm::mat4(1.0);
-	//	modelsofasup = glm::translate(modelsofasup, glm::vec3(-5.0, -1.0, 4.0));
-	//	modelsofasup = glm::scale(modelsofasup, glm::vec3(2.8, 0.5, 1.0));
-	//	// se activa la textura del agua
-	//	glbindtexture(gl_texture_2d, textureid11);
-	//	//le cambiamos el shader con multiplesluces no olvidar
-	////shadermullighting.setfloat("offsetx", offx);
-	//	sofa2.render(modelsofasup);
-	//	glbindtexture(gl_texture_2d, 0);
-	//	//	shadermullighting.setfloat("offsetx", 0);
-
-	//	//fondo sofa
-	//	glm::mat4 modelsofaotro = glm::mat4(1.0);
-	//	modelsofaotro = glm::translate(modelsofaotro, glm::vec3(-5.0, -2.0, 2.0));
-	//	modelsofaotro = glm::scale(modelsofaotro, glm::vec3(1.7, 1.3, 4.3));
-	//	// se activa la textura del agua
-	//	glbindtexture(gl_texture_2d, textureid11);
-	//	//le cambiamos el shader con multiplesluces no olvidar
-	////shadermullighting.setfloat("offsetx", offx);
-	//	sofa3.render(modelsofaotro);
-	//	glbindtexture(gl_texture_2d, 0);
-	//	//	shadermullighting.setfloat("offsetx", 0);
-
-	////brazo sofa derecho
-	//	glm::mat4 modelsofaotrodere = glm::mat4(1.0);
-	//	modelsofaotrodere = glm::translate(modelsofaotrodere, glm::vec3(-5.0, -1.0, 2.0));
-	//	modelsofaotrodere = glm::scale(modelsofaotrodere, glm::vec3(1.7, 0.3, 3.8));
-	//	// se activa la textura del agua
-	//	glbindtexture(gl_texture_2d, textureid11);
-	//	//le cambiamos el shader con multiplesluces no olvidar
-	////shadermullighting.setfloat("offsetx", offx);
-	//	sofa4.render(modelsofaotrodere);
-	//	glbindtexture(gl_texture_2d, 0);
-	//	//	shadermullighting.setfloat("offsetx", 0);
-
-
 
 		// =========================== MESA ==============================0
 
@@ -4977,7 +4921,7 @@ void applicationLoop() {
 
 		//MAQUINA DE ESTADOS DEL AUTO 
 
-		switch (state) {
+		switch (stateAuto) {
 		case 0:
 			std::cout << "Advance:" << std::endl;
 			// -0.01 debe ser igual en magnitud 
@@ -4986,7 +4930,7 @@ void applicationLoop() {
 			if (offsetAutoAdvance > 60.0) {
 
 				offsetAutoAdvance = 0.0;
-				state = 1;
+				stateAuto = 1;
 			}
 
 
@@ -5010,7 +4954,7 @@ void applicationLoop() {
 		 * State machines
 		 *******************************************/
 		 // State machine for eclipse car
-		switch (stateAuto) {
+		switch (stateEclipse) {
 		case 0:
 			modelMatrixEclipse2 = glm::translate(modelMatrixEclipse2, glm::vec3(0.0, 0.0, 0.1));
 			advanceCount += 0.1;
@@ -5020,7 +4964,7 @@ void applicationLoop() {
 				rotWheelsY = 0;
 			if (advanceCount > 10.0) {
 				advanceCount = 0;
-				stateAuto = 1;
+				stateEclipse = 1;
 			}
 			break;
 		case 1:
@@ -5033,7 +4977,7 @@ void applicationLoop() {
 				rotWheelsY = 0.25;
 			if (rotCount >= 90.0) {
 				rotCount = 0;
-				stateAuto = 0;
+				stateEclipse = 0;
 			}
 			break;
 		}
@@ -5079,25 +5023,51 @@ void applicationLoop() {
 			break;
 		}
 
+		
+		// =======================Movimiento del Lich ===========================
+
+
+		switch (stateLich) {
+		case 0:
+			std::cout << "FrenteLich:" << std::endl;
+			matrixModelLich = glm::translate(matrixModelLich, glm::vec3(0.1, 0.0, 0.0));
+			offsetLich += 0.1;
+			if (offsetLich > 20.0) {
+				offsetLich = 0.0;
+				stateLich = 1;
+			}
+			break;
+		case 1:
+			std::cout << "AtrasLich:" << std::endl;
+			matrixModelLich = glm::translate(matrixModelLich, glm::vec3(-0.1, 0.0, 0.0));
+			offsetLich += -0.1;
+			if (offsetLich < -20.0) {
+				offsetLich = 0.0;
+				stateLich = 0;
+			}
+			break;
+		}
+
+
 
 		//-------------------------------------MOVIMIENTO DE Auto Halloween ---------------------------------------------------
 
 		switch (state) {
 		case 0:
-			std::cout << "Sube:" << std::endl;
+			std::cout << "Frente:" << std::endl;
 			matrixModelEclipse = glm::translate(matrixModelEclipse, glm::vec3(0.0, 0.0, 0.1));
-			offsetAircraftAdvance += 0.1;
-			if (offsetAircraftAdvance > 10.0) {
-				offsetAircraftAdvance = 0.0;
+			offsetAircraftAdvance2 += 0.1;
+			if (offsetAircraftAdvance2 > 10.0) {
+				offsetAircraftAdvance2 = 0.0;
 				state = 1;
 			}
 			break;
 		case 1:
-			std::cout << "Baja:" << std::endl;
+			std::cout << "Atras:" << std::endl;
 			matrixModelEclipse = glm::translate(matrixModelEclipse, glm::vec3(0.0, 0.0, -0.1));
-			offsetAircraftAdvance += -0.1;
-			if (offsetAircraftAdvance < -10.0) {
-				offsetAircraftAdvance = 0.0;
+			offsetAircraftAdvance2 += -0.1;
+			if (offsetAircraftAdvance2 < -10.0) {
+				offsetAircraftAdvance2 = 0.0;
 				state = 0;
 			}
 			break;
