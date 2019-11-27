@@ -2180,7 +2180,7 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	Texture texture16("../Textures/tv.jpg");
 	// Carga el mapa de bits (FIBITMAP es el tipo de dato de la libreria)
 	// Voltear la imagen
-	bitmap = texture16.loadImage(true);
+	bitmap = texture16.loadImage();
 	// Convertimos el mapa de bits en un arreglo unidimensional de tipo unsigned char
 	data = texture16.convertToData(bitmap, imageWidth, imageHeight);
 	// Creando la textura con id 1
